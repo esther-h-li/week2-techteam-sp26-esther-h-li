@@ -15,10 +15,10 @@ def read_root():
 
 @app.get("/users")
 def read_users():
-    return list(db_users.values)
+    return list(db_users.values())
 
 
-@app.post("/user")
+@app.post("/user", status_code = 201)
 def create_user(user: User):
     db_users[user._id] = user
     return user
@@ -37,20 +37,21 @@ def get_all_users_prefix(prefix: str):
     for user in db_users:
         if(user.name.startsWith(prefix)):
             users.append(user)
-    return users.values
-
+    return users
  
 
 
 @app.delete("/user")
 def delete_user(_id:int):
     if _id in db_users:
-        db_users.remove(_id)
+        del db_users[_id]
+    else:
+       raise HTTPException(status_code=404, detail="User not found")        
 
 
 @app.get("/products")
 def read_products():
-    return list(db_products.values)
+    return list(db_products.values())
 
 
 @app.post("/product")
@@ -63,6 +64,8 @@ def create_product(product: Product):
 def update_product(product: Product):
     if(product.id in db_products):
         db_products[product._id] = product
+    else:
+       raise HTTPException(status_code=404, detail="Product not found")
     return product
 
 
@@ -70,4 +73,6 @@ def update_product(product: Product):
 def delete_product(_id:int):
         if(_id in db_products):
             del db_products[_id]
+        else:
+            raise HTTPException(status_code=404, detail="Product not found")
         return {"message": "Product deleted"}
