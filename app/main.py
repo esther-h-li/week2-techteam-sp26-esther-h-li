@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from model import User, Product
+from fastapi import HTTPException
 
 app = FastAPI()
 
@@ -20,15 +21,17 @@ def read_users():
 
 @app.post("/user", status_code = 201)
 def create_user(user: User):
-    db_users[user._id] = user
+    db_users[user.id] = user
     return user
 
 
 @app.put("/user")
 def update_user(user: User):
-    if user._id in db_users:
-        db_users[user._id] = user
-    return {"message": "User deleted"}
+    if user.id in db_users:
+        db_users[user.id] = user
+        return user
+    else: raise HTTPException(status_code=404, detail="User not found")
+
 
 
 @app.get("/user")
@@ -45,6 +48,7 @@ def get_all_users_prefix(prefix: str):
 def delete_user(_id:int):
     if _id in db_users:
         del db_users[_id]
+        return {"message": "User deleted"}
     else:
        raise HTTPException(status_code=404, detail="User not found")        
 
@@ -54,19 +58,19 @@ def read_products():
     return list(db_products.values())
 
 
-@app.post("/product")
+@app.post("/product", status_code = 201)
 def create_product(product: Product):
-    db_products[product._id] = product
+    db_products[product.id] = product
     return product
 
 
 @app.put("/product")
 def update_product(product: Product):
     if(product.id in db_products):
-        db_products[product._id] = product
+        db_products[product.id] = product
+        return product
     else:
        raise HTTPException(status_code=404, detail="Product not found")
-    return product
 
 
 @app.delete("/product")

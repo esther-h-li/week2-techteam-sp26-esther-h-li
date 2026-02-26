@@ -1,13 +1,13 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class User(BaseModel):
-    _id: int
+    id: int = Field(alias="_id")
     name: str
     email: str
 
 
 class Product(BaseModel):
-    _id: int
+    id: int = Field(alias="_id")
     name: str
     price: float
