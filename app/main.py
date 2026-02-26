@@ -28,7 +28,7 @@ def create_user(user: User):
 def update_user(user: User):
     if user.id in db_users:
         db_users[user.id] = user
-    return user
+    return {"message": "User deleted"}
 
 
 @app.get("/user")
@@ -63,9 +63,11 @@ def create_product(product: Product):
 def update_product(product: Product):
     if(product.id in db_products):
         db_products[product.id] = product
+    return product
 
 
 @app.delete("/product")
 def delete_product(_id:int):
         if(_id in db_products):
             del db_products[_id]
+        return {"message": "Product deleted"}
