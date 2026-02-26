@@ -20,14 +20,14 @@ def read_users():
 
 @app.post("/user")
 def create_user(user: User):
-    db_users[user.id] = user
+    db_users[user._id] = user
     return user
 
 
 @app.put("/user")
 def update_user(user: User):
-    if user.id in db_users:
-        db_users[user.id] = user
+    if user._id in db_users:
+        db_users[user._id] = user
     return {"message": "User deleted"}
 
 
@@ -55,14 +55,14 @@ def read_products():
 
 @app.post("/product")
 def create_product(product: Product):
-    db_products[id] = product
+    db_products[product._id] = product
     return product
 
 
 @app.put("/product")
 def update_product(product: Product):
     if(product.id in db_products):
-        db_products[product.id] = product
+        db_products[product._id] = product
     return product
 
 
